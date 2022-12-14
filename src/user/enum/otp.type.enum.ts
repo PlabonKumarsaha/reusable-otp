@@ -1,0 +1,4 @@
+enum OtpTypes {
+  NUMERIC,
+  ALPHANEUMERIC,
+}

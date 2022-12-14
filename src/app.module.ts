@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { OtpServiceModule } from './otp-service/otp-service.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user/user.entity';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'root',
       password: '12345',
       database: 'otp',
-      entities: [],
+      entities: [User],
       synchronize: true,
     }),
     OtpServiceModule,
