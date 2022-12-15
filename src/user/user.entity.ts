@@ -19,9 +19,9 @@ export class User {
   @Column()
   template: string;
   @Column()
-  duration: string;
+  duration: number;
   @Column()
-  otpType: OtpTypes;
+  otpType: string;
   @Column()
   key: string;
 }

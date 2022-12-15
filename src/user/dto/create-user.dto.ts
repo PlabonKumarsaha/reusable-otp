@@ -8,7 +8,7 @@ export class CreateUser {
   @IsString()
   template: string;
   @IsAlphanumeric()
-  duration: string;
+  duration: number;
   @IsString()
-  otpType: OtpTypes;
+  otpType: string;
 }
