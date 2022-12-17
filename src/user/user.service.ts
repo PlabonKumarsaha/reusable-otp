@@ -19,4 +19,18 @@ export class UserService {
     const newUser = this.userRepo.create(user);
     return this.userRepo.save(user);
   }
+  async getUserByEmailAndPassword(
+    email: string,
+    password: string,
+  ): Promise<User> {
+    const User = await this.userRepo
+      .createQueryBuilder('user')
+      .where('user.email= :email AND user.password ', {
+        email: email,
+        password: password,
+      })
+      .getOne();
+
+    return Promise.resolve(User);
+  }
 }
