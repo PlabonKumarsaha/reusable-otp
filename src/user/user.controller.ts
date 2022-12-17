@@ -18,7 +18,6 @@ export class UserController {
     @Query('email') email,
     @Query('password') password,
   ): Promise<User> {
-    console.log('getUserByEmailAndPassowrd : ', email, password);
     return Promise.resolve(
       this.userService.getUserByEmailAndPassword(email, password),
     );

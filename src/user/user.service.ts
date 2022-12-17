@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { CreateUser } from './dto/create-user.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { UserOtpConfig } from './dto/otp-config.dto';
 
 @Injectable()
 export class UserService {
@@ -32,5 +33,21 @@ export class UserService {
       .getOne();
 
     return Promise.resolve(User);
+  }
+
+  async getUserByKey(key: string): Promise<UserOtpConfig> {
+    const user = await this.userRepo.findOne({ where: { key: key } });
+    if (!user) {
+      throw new HttpException(
+        `User with ${key} Not found!`,
+        HttpStatus.NOT_FOUND,
+      );
+    } else {
+      const userConfig = new UserOtpConfig();
+      userConfig.duration = user.duration;
+      userConfig.otpType = user.otpType;
+      userConfig.template = user.template;
+      return userConfig;
+    }
   }
 }
