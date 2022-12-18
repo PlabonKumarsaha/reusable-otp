@@ -7,7 +7,9 @@ export class OtpServiceController {
   @Post()
   generateOTP(@Body() payload: any): Promise<any> {
     console.log('payload', payload);
-    return Promise.resolve(this.otpService.generateOtp(payload.email, 100));
+    return Promise.resolve(
+      this.otpService.generateOtp(payload.email, payload.length, 100),
+    );
   }
 
   @Post('/verify')

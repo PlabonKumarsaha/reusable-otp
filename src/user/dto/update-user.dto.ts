@@ -9,4 +9,5 @@ export class UpdateUser {
   duration: number;
   otpType: string;
   key: string;
+  otpLength: number;
 }
