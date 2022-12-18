@@ -13,7 +13,7 @@ export class OtpServiceService {
   ) {}
 
   async generateOtp(
-    otpType: OtpType,
+    otpType: string,
     length: number,
     ttl: number,
   ): Promise<GenerateOTP> {
@@ -30,8 +30,8 @@ export class OtpServiceService {
     return Promise.resolve({ key, otp });
   }
 
-  async verifyOtp(email: string, otp: string): Promise<any> {
-    const value = await this.cacheManager.get<string>(email);
+  async verifyOtp(key: string, otp: string): Promise<string> {
+    const value = await this.cacheManager.get<string>(key);
     if (value == otp) {
       return Promise.resolve('OTP Verified!');
     } else {
@@ -39,12 +39,26 @@ export class OtpServiceService {
     }
   }
 
-  async generateOtpWithConfig(key: string, otpRequest: RequestForOTP) {
-    const userConfig = await this.userService.getUserByKey(key);
+  async generateOtpWithConfig(otpRequest: RequestForOTP) {
+    const userConfig = await this.userService.getUserByKey(
+      otpRequest.configKey,
+    );
     // this.generateOtp(otpRequest.email,)
 
     if (otpRequest.channel == Channel.EMAIL.toString()) {
+      // call email notification service
+      return this.generateOtp(
+        userConfig.otpType,
+        userConfig.otpLength,
+        userConfig.duration,
+      );
+    } else if (otpRequest.channel == Channel.PHONE.toString()) {
       // call mobile notification service
+      return this.generateOtp(
+        userConfig.otpType,
+        userConfig.otpLength,
+        userConfig.duration,
+      );
     }
   }
   getNumericOtp(length: number) {

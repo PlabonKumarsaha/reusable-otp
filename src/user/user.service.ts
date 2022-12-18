@@ -16,7 +16,7 @@ export class UserService {
     user.template = userDto.template;
     user.otpType = userDto.otpType;
     user.password = userDto.password;
-    user.key = uuidv4();
+    user.configKey = uuidv4();
     const newUser = this.userRepo.create(user);
     return this.userRepo.save(user);
   }
@@ -36,7 +36,7 @@ export class UserService {
   }
 
   async getUserByKey(key: string): Promise<UserOtpConfig> {
-    const user = await this.userRepo.findOne({ where: { key: key } });
+    const user = await this.userRepo.findOne({ where: { configKey: key } });
     if (!user) {
       throw new HttpException(
         `User with ${key} Not found!`,

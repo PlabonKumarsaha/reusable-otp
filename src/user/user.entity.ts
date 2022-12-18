@@ -23,5 +23,7 @@ export class User {
   @Column()
   otpType: string;
   @Column()
-  key: string;
+  configKey: string;
+  @Column()
+  otpLength: number;
 }
