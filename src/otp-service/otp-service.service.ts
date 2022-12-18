@@ -12,10 +12,21 @@ export class OtpServiceService {
     private userService: UserService,
   ) {}
 
-  async generateOtp(channel: string, ttl: number): Promise<GenerateOTP> {
-    const otp = Math.floor(Math.random() * 100).toString();
+  async generateOtp(
+    otpType: OtpType,
+    length: number,
+    ttl: number,
+  ): Promise<GenerateOTP> {
+    let otp = '';
+    if (otpType == OtpType.NUMERIC) {
+      otp = this.getNumericOtp(length);
+    } else if (otpType == OtpType.ALPHA) {
+      otp = this.getAlphanumericOtp(length);
+    } else {
+      otp = this.getAlNumSmallOtp(length);
+    }
     const key: string = uuidv4();
-    await this.cacheManager.set(key, otp, 100);
+    await this.cacheManager.set(key, otp, ttl);
     return Promise.resolve({ key, otp });
   }
 
@@ -35,5 +46,36 @@ export class OtpServiceService {
     if (otpRequest.channel == Channel.EMAIL.toString()) {
       // call mobile notification service
     }
+  }
+  getNumericOtp(length: number) {
+    // Declare a digits variable
+    // which stores all digits
+    const digits = '0123456789';
+    let OTP = '';
+    for (let i = 0; i < length; i++) {
+      OTP += digits[Math.floor(Math.random() * 10)];
+    }
+    return OTP;
+  }
+
+  getAlphanumericOtp(length: number) {
+    const string =
+      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let OTP = '';
+    const len = string.length;
+    for (let i = 0; i < length; i++) {
+      OTP += string[Math.floor(Math.random() * len)];
+    }
+    return OTP;
+  }
+
+  getAlNumSmallOtp(length: number) {
+    const string = 'abcdefghijklmnopqrstuvwxyz1234567890';
+    let OTP = '';
+    const len = string.length;
+    for (let i = 0; i < length; i++) {
+      OTP += string[Math.floor(Math.random() * len)];
+    }
+    return OTP;
   }
 }
