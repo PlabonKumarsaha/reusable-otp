@@ -33,6 +33,7 @@ export class OtpServiceService {
   async verifyOtp(key: string, otp: string): Promise<string> {
     const value = await this.cacheManager.get<string>(key);
     if (value == otp) {
+      this.cacheManager.del(key);
       return Promise.resolve('OTP Verified!');
     } else {
       return Promise.resolve('Unverified');

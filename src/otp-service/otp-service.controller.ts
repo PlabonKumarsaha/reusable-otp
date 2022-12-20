@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { RequestForOTP } from './dtos/request-for-otp.dto';
+import { VerifyRequest } from './dtos/verify-otp.dto';
 import { OtpServiceService } from './otp-service.service';
 
 @Controller('otp-service')
@@ -11,9 +12,7 @@ export class OtpServiceController {
   }
 
   @Post('/verify')
-  verifyOTP(@Body() payload: any): Promise<any> {
-    return Promise.resolve(
-      this.otpService.verifyOtp(payload.email, payload.otp),
-    );
+  verifyOTP(@Body() payload: VerifyRequest): Promise<any> {
+    return Promise.resolve(this.otpService.verifyOtp(payload.key, payload.otp));
   }
 }
