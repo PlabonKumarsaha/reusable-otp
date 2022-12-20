@@ -1,4 +1,10 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { UserService } from 'src/user/user.service';
 import { GenerateOTP } from './dtos/generate-otp.dto';
@@ -36,7 +42,7 @@ export class OtpServiceService {
       this.cacheManager.del(key);
       return Promise.resolve('OTP Verified!');
     } else {
-      return Promise.resolve('Unverified');
+      return Promise.resolve('OTP Unverified');
     }
   }
 
@@ -44,20 +50,25 @@ export class OtpServiceService {
     const userConfig = await this.userService.getUserByKey(
       otpRequest.configKey,
     );
-    if (otpRequest.channel == 'EMAIL') {
+    if (otpRequest.channel == 'EMAIL' && otpRequest.email != null) {
       // call email notification service
       return this.generateOtp(
         userConfig.otpType,
         userConfig.otpLength,
         userConfig.duration,
       );
-    } else if (otpRequest.channel == 'PHONE') {
+    } else if (
+      otpRequest.channel == 'PHONE' &&
+      otpRequest.phoneNumber != null
+    ) {
       // call mobile notification service
       return this.generateOtp(
         userConfig.otpType,
         userConfig.otpLength,
         userConfig.duration,
       );
+    } else {
+      throw new HttpException(`invalid paylaod`, HttpStatus.BAD_REQUEST);
     }
   }
   getNumericOtp(length: number): string {
