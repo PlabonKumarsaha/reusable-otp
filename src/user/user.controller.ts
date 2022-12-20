@@ -9,7 +9,6 @@ export class UserController {
 
   @Post()
   create(@Body() payload: CreateUser): Promise<any> {
-    console.log('payload -> ', payload);
     return Promise.resolve(this.userService.create(payload));
   }
 

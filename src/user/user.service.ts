@@ -47,6 +47,7 @@ export class UserService {
       userConfig.duration = user.duration;
       userConfig.otpType = user.otpType;
       userConfig.template = user.template;
+      userConfig.otpLength = user.otpLength;
       return userConfig;
     }
   }

@@ -1,15 +1,13 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { RequestForOTP } from './dtos/request-for-otp.dto';
 import { OtpServiceService } from './otp-service.service';
 
 @Controller('otp-service')
 export class OtpServiceController {
   constructor(private otpService: OtpServiceService) {}
   @Post()
-  generateOTP(@Body() payload: any): Promise<any> {
-    console.log('payload', payload);
-    return Promise.resolve(
-      this.otpService.generateOtp(payload.email, payload.length, 100),
-    );
+  generateOTP(@Body() payload: RequestForOTP): Promise<any> {
+    return Promise.resolve(this.otpService.generateOtpWithConfig(payload));
   }
 
   @Post('/verify')

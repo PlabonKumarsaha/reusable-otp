@@ -18,9 +18,9 @@ export class OtpServiceService {
     ttl: number,
   ): Promise<GenerateOTP> {
     let otp = '';
-    if (otpType == OtpType.NUMERIC) {
+    if (otpType == 'NUMERIC') {
       otp = this.getNumericOtp(length);
-    } else if (otpType == OtpType.ALPHA) {
+    } else if (otpType == 'ALPHANEUMERIC') {
       otp = this.getAlphanumericOtp(length);
     } else {
       otp = this.getAlNumSmallOtp(length);
@@ -43,16 +43,14 @@ export class OtpServiceService {
     const userConfig = await this.userService.getUserByKey(
       otpRequest.configKey,
     );
-    // this.generateOtp(otpRequest.email,)
-
-    if (otpRequest.channel == Channel.EMAIL.toString()) {
+    if (otpRequest.channel == 'EMAIL') {
       // call email notification service
       return this.generateOtp(
         userConfig.otpType,
         userConfig.otpLength,
         userConfig.duration,
       );
-    } else if (otpRequest.channel == Channel.PHONE.toString()) {
+    } else if (otpRequest.channel == 'PHONE') {
       // call mobile notification service
       return this.generateOtp(
         userConfig.otpType,
@@ -61,7 +59,7 @@ export class OtpServiceService {
       );
     }
   }
-  getNumericOtp(length: number) {
+  getNumericOtp(length: number): string {
     // Declare a digits variable
     // which stores all digits
     const digits = '0123456789';
@@ -72,7 +70,7 @@ export class OtpServiceService {
     return OTP;
   }
 
-  getAlphanumericOtp(length: number) {
+  getAlphanumericOtp(length: number): string {
     const string =
       '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let OTP = '';
@@ -83,7 +81,7 @@ export class OtpServiceService {
     return OTP;
   }
 
-  getAlNumSmallOtp(length: number) {
+  getAlNumSmallOtp(length: number): string {
     const string = 'abcdefghijklmnopqrstuvwxyz1234567890';
     let OTP = '';
     const len = string.length;

@@ -1,6 +1,5 @@
 enum OtpType {
-    NUMERIC = 'numeric',
-    ALPHA = 'phone',
-    SMALL_NUM = 'small num'
-  }
-  
+  NUMERIC = 'NUMERIC',
+  ALPHA = 'ALPHANEUMERIC',
+  SMALL_NUM = 'SMALL_NUM',
+}
