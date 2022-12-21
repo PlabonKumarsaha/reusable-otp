@@ -1,5 +1,5 @@
-enum OtpType {
+export enum OtpType {
   NUMERIC = 'NUMERIC',
-  ALPHA = 'ALPHANEUMERIC',
+  ALPHANUMERIC = 'ALPHANEUMERIC',
   SMALL_NUM = 'SMALL_NUM',
 }

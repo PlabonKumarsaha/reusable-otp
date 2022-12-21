@@ -1,4 +1,4 @@
-enum Channel {
-  EMAIL = 'email',
-  PHONE = 'phone',
+export enum Channel {
+  EMAIL = 'EMAIL',
+  PHONE = 'PHONE',
 }

@@ -10,6 +10,8 @@ import { UserService } from 'src/user/user.service';
 import { GenerateOTP } from './dtos/generate-otp.dto';
 import { RequestForOTP } from './dtos/request-for-otp.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { OtpType } from './enums/otp-type.enum';
+import { Channel } from './enums/channel.enum';
 
 @Injectable()
 export class OtpServiceService {
@@ -24,9 +26,9 @@ export class OtpServiceService {
     ttl: number,
   ): Promise<GenerateOTP> {
     let otp = '';
-    if (otpType == 'NUMERIC') {
+    if (otpType == OtpType.NUMERIC) {
       otp = this.getNumericOtp(length);
-    } else if (otpType == 'ALPHANEUMERIC') {
+    } else if (otpType == OtpType.ALPHANUMERIC) {
       otp = this.getAlphanumericOtp(length);
     } else {
       otp = this.getAlNumSmallOtp(length);
@@ -50,7 +52,7 @@ export class OtpServiceService {
     const userConfig = await this.userService.getUserByKey(
       otpRequest.configKey,
     );
-    if (otpRequest.channel == 'EMAIL' && otpRequest.email != null) {
+    if (otpRequest.channel === Channel.EMAIL && otpRequest.email !== null) {
       // call email notification service
       return this.generateOtp(
         userConfig.otpType,
@@ -58,8 +60,8 @@ export class OtpServiceService {
         userConfig.duration,
       );
     } else if (
-      otpRequest.channel == 'PHONE' &&
-      otpRequest.phoneNumber != null
+      otpRequest.channel === Channel.PHONE &&
+      otpRequest.phoneNumber !== null
     ) {
       // call mobile notification service
       return this.generateOtp(
