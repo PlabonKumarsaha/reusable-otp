@@ -54,6 +54,7 @@ export class OtpServiceService {
     );
     if (otpRequest.channel === Channel.EMAIL && otpRequest.email !== null) {
       // call email notification service
+      await this.rateLimit(otpRequest.email);
       return this.generateOtp(
         userConfig.otpType,
         userConfig.otpLength,
@@ -63,6 +64,7 @@ export class OtpServiceService {
       otpRequest.channel === Channel.PHONE &&
       otpRequest.phoneNumber !== null
     ) {
+      await this.rateLimit(otpRequest.phoneNumber);
       // call mobile notification service
       return this.generateOtp(
         userConfig.otpType,
@@ -103,5 +105,16 @@ export class OtpServiceService {
       OTP += string[Math.floor(Math.random() * len)];
     }
     return OTP;
+  }
+
+  async rateLimit(channel: string) {
+    const isExist = await this.cacheManager.get<number>(channel);
+    if (isExist && isExist >= 5) {
+      throw new HttpException('Rate limit crossed', HttpStatus.FORBIDDEN);
+    } else if (isExist < 5) {
+      await this.cacheManager.set(channel, isExist + 1, 200000);
+    } else {
+      await this.cacheManager.set(channel, 1, 200000);
+    }
   }
 }
