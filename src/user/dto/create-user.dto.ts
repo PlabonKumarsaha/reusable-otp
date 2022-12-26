@@ -11,6 +11,5 @@ export class CreateUser {
   duration: number;
   @IsString()
   otpType: string;
-  @IsAlphanumeric()
-  otpLength: number;
+  otpLength = 6;
 }

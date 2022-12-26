@@ -17,6 +17,7 @@ export class UserService {
     user.otpType = userDto.otpType;
     user.password = userDto.password;
     user.configKey = uuidv4();
+    user.otpLength = userDto.otpLength;
     const newUser = this.userRepo.create(user);
     return this.userRepo.save(user);
   }
